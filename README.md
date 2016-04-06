@@ -5,3 +5,4 @@ Authors
 =======
 
 [Ryan](mailto:rwb1005@wildcats.unh.edu)
+[Adam](mailto:aleblanc501@outlook.com)
