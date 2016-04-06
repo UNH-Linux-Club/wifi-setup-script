@@ -5,3 +5,4 @@ Authors
 =======
 
 [Ryan](mailto:rwb1005@wildcats.unh.edu)
+[Ethan](mailto:es2025@wildcats.unh.edu)
