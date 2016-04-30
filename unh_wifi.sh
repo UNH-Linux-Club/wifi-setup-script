@@ -55,7 +55,15 @@ get_info() {
 	echo "User: $user Password: $passw"
 }
 
-# Run the script and cx
+# Run the script and attempt to elevate if we can.
+# We only print the opening intro if they're running as a standard
+# user. If they're running as root, we skip it and go directly to
+# the setup. This serves two purposes:
+#
+# a) it simplifies reducing duplicated code when the script is
+#    launched again via sudo; and
+# b) if they're advanced enough to be "taking the plunge" as root,
+#    we can probably spare them noobish treatment.
 if [ $EUID != 0 ]
 then
 	intro
