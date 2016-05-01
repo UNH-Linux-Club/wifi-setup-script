@@ -2,12 +2,6 @@
 # Contribution of the President, Keith M. Hoodlet, 04.13.2016
 #
 # Written by the UNH Linux Club
-read_passwd() {
-	stty -echo
-	read -p "Password: " passw; echo
-	stty echo
-}
-
 check_reqs() {
 	# Make sure we're running Linux and not on a Mac
 	OS_NAME=`uname`
@@ -80,7 +74,5 @@ else
 
 	get_info
 fi
-
-# Get user input.
 
 exit 0
