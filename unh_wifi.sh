@@ -29,7 +29,7 @@ intro() {
 	echo ""
 
 	check_reqs
-	if [ $? -eq 0 ]
+	if [ ! $? -eq 1 ]
 	then
 		echo "Error: distribution not supported."
 		exit 1
@@ -37,6 +37,29 @@ intro() {
 
 	echo -n "System Information: "
 	echo "`uname` `uname -r`"
+}
+
+start_network() {
+	echo -n "Starting network manager... "
+	STATUS=$( start network-manager )
+	if [[ ! $STATUS -eq 0 ]]
+	then
+		echo "failed."
+		exit 1
+	fi
+}
+
+check_if_already_registered() {
+	echo -n "Scanning registered networks... "
+	if [ -f /etc/NetworkManager/system-connections/UNH-Secure ]
+	then
+		echo "failed!"
+		echo "There is already a network named UNH-Secure registered with the system."
+		echo "Please forget it and then try again."
+		exit 1
+	else
+		echo "done!"
+	fi
 }
 
 get_info() {
@@ -47,6 +70,8 @@ get_info() {
 
 	# Don't actually do this in production.
 	echo "User: $user Password: $passw"
+	start_network
+	check_if_already_registered
 }
 
 # Run the script and attempt to elevate if we can.
