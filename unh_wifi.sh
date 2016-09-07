@@ -49,17 +49,11 @@ run_nmcli() {
 	nmcli con add type wifi ifname $interface con-name UNH-Secure ssid UNH-Secure
 
 	echo "Editing UNH-Secure profile..."
-	nmcli con edit UNH-Secure <<EOF
-set 802-1x.eap peap
-set 802-1x.identity $user
-set 802-1x.phase2-auth mschapv2
-set 802-11-wireless-security.auth-alg open
-set 802-11-wireless-security.key-mgmt wpa-eap
-save
-quit
-EOF
+	nmcli con modify UNH-Secure 802-1x.eap peap 802-1x.identity $user 802-1x.password $passw 802-1x.phase2-auth mschapv2 802-11-wireless-security.auth-alg open 802-11-wireless-security.key-mgmt wpa-eap
 
-	if [ $? != 0 ]; then
+	if [ $? == 0 ]; then
+		echo "Done!"
+	else
 		exit 1
 	fi
 }
@@ -89,6 +83,22 @@ check_if_already_registered() {
 get_info() {
 	read -p "Username: " user
 	echo
+
+	bad=true
+
+	while $bad; do
+		read -s -p "Password (the text will not show up): " passw
+		echo
+		read -s -p "Type your password again to verify: " passwTest
+		echo
+
+		if [ $passw != $passwTest ]; then
+			echo "Passwords do not match, try again..."
+			echo
+		else
+			bad=false
+		fi
+	done
 }
 
 main() {
@@ -97,7 +107,7 @@ main() {
 	echo "This script will attempt to automatically setup the WiFi connection"
 	echo "on your new Linux PC. You will need your UNH username."
 	echo "(same as Blackboard)."
-	echo ""
+	echo
 
 	# We can assume they are using netowrk manager
 	check_if_already_registered
