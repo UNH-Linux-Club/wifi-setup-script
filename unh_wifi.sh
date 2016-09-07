@@ -28,8 +28,25 @@ intro() {
 }
 
 run_nmcli() {
+	echo "Finding network interface..."
+	interface=$(ip link | grep wlan)
+
+	if [ $? == 0 ]; then
+		interface=$(ip link | grep wlan | cut -d ':' -f 2 | xargs)
+	else
+		interface=$(ip link | grep wlp)
+
+		if [ $? == 0 ]; then
+			interface=$(ip link | grep wlp | cut -d ':' -f 2 | xargs)
+		else
+			ip link
+			echo
+			echo "Cannot find interface! Is your wireless card working?"
+		fi
+	fi
+
 	echo "Creating UNH-Secure profile..."
-	nmcli con add type wifi ifname wlp3s0 con-name UNH-Secure ssid UNH-Secure
+	nmcli con add type wifi ifname $interface con-name UNH-Secure ssid UNH-Secure
 
 	echo "Editing UNH-Secure profile..."
 	nmcli con edit UNH-Secure <<EOF
