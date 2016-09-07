@@ -69,8 +69,20 @@ check_if_already_registered() {
 	then
 		echo "There is already a network named UNH-Secure registered with the system."
 		echo "Please forget it and then try again."
-		exit 1
-		# TODO ask user if they would like us to delete it for them
+
+		read -n 1 -p "Would you like us to remove it? [yn] " yn
+		echo # read -n 1 doesn't make a new line
+
+		case $yn in
+			[Yy]* )
+				nmcli con delete UNH-Secure
+				echo
+				;;
+			[Nn]* )
+				exit 1
+				;;
+			* ) echo "Please answer Yes or No"; exit;;
+		esac
 	fi
 }
 
