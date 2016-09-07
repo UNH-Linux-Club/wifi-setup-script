@@ -14,7 +14,7 @@ If you want a super basic, out-of-the-box experience, simply hook yourself
 up with Ethernet or connect to UNH-Public, and then open up a terminal and
 type:
 
-    curl -s https://raw.githubusercontent.com/UNH-Linux-Club/wifi-setup-script/master/unh_wifi.sh | sudo bash
+    bash <(curl -s https://raw.githubusercontent.com/UNH-Linux-Club/wifi-setup-script/master/unh_wifi.sh)
 
 Authors
 =======
