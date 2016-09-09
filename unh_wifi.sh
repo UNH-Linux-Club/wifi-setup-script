@@ -48,8 +48,18 @@ run_nmcli() {
 	echo "Creating UNH-Secure profile..."
 	nmcli con add type wifi ifname $interface con-name UNH-Secure ssid UNH-Secure
 
+	# The main reason fro this script is to set up the options that would
+	# have to be set up manually, such as peap and disabling the certificate.
+	# I would like to have the certificate working, however, but that may
+	# be done at a later date.
 	echo "Editing UNH-Secure profile..."
-	nmcli con modify UNH-Secure 802-1x.eap peap 802-1x.identity $user 802-1x.password $passw 802-1x.phase2-auth mschapv2 802-11-wireless-security.auth-alg open 802-11-wireless-security.key-mgmt wpa-eap
+	nmcli con modify UNH-Secure \
+		802-1x.eap peap \
+		802-1x.identity $user \
+		802-1x.password $passw \
+		802-1x.phase2-auth mschapv2 \
+		802-11-wireless-security.auth-alg open \
+		802-11-wireless-security.key-mgmt wpa-eap
 
 	if [ $? == 0 ]; then
 		echo "Done!"
@@ -84,9 +94,7 @@ get_info() {
 	read -p "Username: " user
 	echo
 
-	bad=true
-
-	while $bad; do
+	while true; do
 		read -s -p "Password (the text will not show up): " passw
 		echo
 		read -s -p "Type your password again to verify: " passwTest
@@ -96,7 +104,7 @@ get_info() {
 			echo "Passwords do not match, try again..."
 			echo
 		else
-			bad=false
+			break
 		fi
 	done
 }
@@ -105,7 +113,7 @@ main() {
 	intro
 	echo "======================================"
 	echo "This script will attempt to automatically setup the WiFi connection"
-	echo "on your new Linux PC. You will need your UNH username."
+	echo "on your new Linux PC. You will need your UNH username and password."
 	echo "(same as Blackboard)."
 	echo
 
